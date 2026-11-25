@@ -1,0 +1,18 @@
+{
+  "name": "taste-skill-low-code",
+  "description": "Taste Skill para low-code: o bom gosto do taste-skill, entregue como itens modulares (Mendix em primeiro lugar) em vez de UX hard-coded.",
+  "owner": {
+    "name": "ljacomi"
+  },
+  "plugins": [
+    {
+      "name": "taste-skill-low-code",
+      "description": "Tema, design properties, layouts, page templates, building blocks, snippets e domain models para apps low-code, com as regras anti-slop do taste-skill e checagens em script.",
+      "version": "0.1.0",
+      "source": "./",
+      "skills": ["./skills/taste-skill-low-code"],
+      "license": "MIT",
+      "keywords": ["skills", "low-code", "mendix", "design", "taste", "domain-model", "atlas-ui"]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+// =============================================================================
+// Modelo de tokens para Atlas 4 · variáveis CSS em :root
+//
+// NÃO substitua o custom-variables.scss do app por este arquivo. No arquivo do
+// app, dentro do bloco :root { … }, descomente e altere apenas as variáveis
+// de mesmo nome listadas abaixo. O resto do arquivo fica como está.
+//
+// CONTRATO MODULAR: é aqui, e só aqui, que a marca do cliente entra no app.
+// Nenhuma cor, fonte ou raio é digitado em página, widget ou CSS de tela.
+// Os tokens --tk-* do módulo TasteKit leem estas variáveis sozinhos.
+//
+// Os valores abaixo são um padrão neutro de segurança. Troque o acento, os
+// neutros e a fonte pelos do cliente (logo, produto, material). Sem violeta.
+// =============================================================================
+
+:root {
+    // Marca: um acento. O azul padrão do Atlas não fica.
+    --brand-primary: #1f5f4a;
+    --brand-success: #2f7d4f;
+    --brand-warning: #9a5b00;
+    --brand-danger: #b3261e;
+
+    // Texto: um quase-preto quente, nunca #000.
+    --font-color-default: #1c1b19;
+    --font-color-header: #1c1b19;
+    --font-color-detail: #5c5a55;
+
+    // Fonte: a do cliente; na falta, a do sistema. Uma família para tudo.
+    --font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-size-default: 14px; // 16px em portal, fluxo e campo
+    --font-weight-header: 600;
+    --font-size-h1: 28px;
+    --font-size-h2: 20px;
+    --font-size-h3: 16px;
+
+    // Fundos: a página e a superfície.
+    --bg-color: #f6f5f2;
+    --bg-color-secondary: #ffffff;
+
+    // Fio e raio: uma família de raio no app (soft).
+    --border-color-default: #dcdad4;
+    --border-radius-default: 6px;
+    --btn-border-radius: var(--border-radius-default);
+    --form-input-border-radius: var(--border-radius-default);
+    --card-border-radius: 8px;
+
+    // Moldura: cor chapada, sem o gradiente padrão.
+    --topbar-bg: #ffffff;
+    --sidebar-bg: #f6f5f2;
+    --navigation-color: #1c1b19;
+    --navigation-color-hover: #1c1b19;
+    --navigation-color-active: #1c1b19;
+
+    // Sombra: card sem sombra; separe com fio.
+    --card-shadow: none;
+
+    // Botão padrão discreto; o preenchido é só o primário.
+    --btn-default-bg: #ffffff;
+    --btn-default-color: #1c1b19;
+    --btn-default-border-color: #c9c6be;
+    --btn-primary-bg: var(--brand-primary);
+    --btn-primary-border-color: var(--brand-primary);
+}

@@ -1,0 +1,77 @@
+// Tokens do sistema. A ÚNICA fonte de números do módulo.
+//
+// As cores e a fonte leem as variáveis do tema do app (custom-variables.scss),
+// para que a marca seja configurada num lugar só:
+//   - Atlas 4: --brand-primary etc. já são variáveis CSS; nada a fazer.
+//   - Atlas 3: cole assets/theme/main.atlas3-bridge.scss em theme/web/main.scss.
+// O segundo valor de cada var() é só o padrão de segurança do kit; a paleta
+// real vem do cliente (logo, produto, material), nunca deste arquivo.
+
+:root {
+    // Cor: interface 90 a 95% neutra, um acento, sem violeta.
+    --tk-ink: var(--font-color-default, #1c1b19);
+    --tk-muted: color-mix(in srgb, var(--tk-ink) 68%, var(--tk-g-alt));
+    --tk-line: color-mix(in srgb, var(--tk-ink) 14%, transparent);
+    --tk-g-main: var(--bg-color, #f6f5f2);
+    --tk-g-alt: var(--bg-color-secondary, #ffffff);
+    --tk-g-band: color-mix(in srgb, var(--tk-action) 8%, var(--tk-g-alt));
+    --tk-action: var(--brand-primary, #1f5f4a);
+    --tk-action-hover: color-mix(in srgb, var(--tk-action) 86%, var(--tk-ink));
+    --tk-on-action: #ffffff;
+    --tk-success: var(--brand-success, #2f7d4f);
+    --tk-warning: var(--brand-warning, #9a5b00);
+    --tk-danger: var(--brand-danger, #b3261e);
+
+    // Espaço: uma escala para toda margem, gap e padding.
+    --tk-s-1: 4px;
+    --tk-s-2: 8px;
+    --tk-s-3: 12px;
+    --tk-s-4: 16px;
+    --tk-s-5: 24px;
+    --tk-s-6: 32px;
+    --tk-s-7: 48px;
+    --tk-s-8: 64px;
+    --tk-s-9: 96px;
+
+    // Larguras de conteúdo e de leitura.
+    --tk-wrap: 1280px;
+    --tk-wrap-narrow: 720px;
+    --tk-gutter: var(--tk-s-6);
+    --tk-measure: 62ch;
+
+    // Tipo: um tamanho por tipo de elemento.
+    --tk-font: var(--font-family-base, system-ui, sans-serif);
+    --tk-t-page: 28px;
+    --tk-t-section: 20px;
+    --tk-t-card: 16px;
+    --tk-t-lead: 18px;
+    --tk-t-body: 16px;
+    --tk-t-label: 13px;
+    --tk-t-meta: 13px;
+    --tk-t-figure: 32px;
+
+    // Raio (família "soft"), fio e a única sombra, só para o que flutua.
+    --tk-radius: 6px;
+    --tk-radius-lg: 8px;
+    --tk-hairline: 1px;
+    --tk-shadow: 0 8px 24px color-mix(in srgb, var(--tk-ink) 12%, transparent);
+
+    // Controles e linhas.
+    --tk-control: 40px;
+    --tk-tap: 44px;
+    --tk-row: 48px;
+
+    // Movimento.
+    --tk-fast: 120ms;
+    --tk-base: 200ms;
+    --tk-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+// Telefone: margens e títulos menores, alvos iguais.
+@media (max-width: 640px) {
+    :root {
+        --tk-gutter: var(--tk-s-4);
+        --tk-t-page: 24px;
+        --tk-t-figure: 28px;
+    }
+}

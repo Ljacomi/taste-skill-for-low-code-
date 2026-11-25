@@ -1,0 +1,26 @@
+// =============================================================================
+// TasteKit · módulo de UI resources (Mendix: themesource/tastekit/web/main.scss)
+//
+// CONTRATO MODULAR: este arquivo NÃO é a interface de nenhuma tela.
+// É a infraestrutura reutilizável do sistema visual. Nenhuma página é escrita
+// em HTML/CSS: as telas são compostas no Studio Pro com layouts, page
+// templates, building blocks e snippets, e o estilo é aplicado somente pelas
+// design properties declaradas em design-properties.json.
+//
+// Regras deste módulo:
+//   1. Números (cor, tamanho, espaço, tempo) só em _tokens.scss.
+//   2. Toda classe começa com "tk-" e é exposta por uma design property.
+//   3. Nada de .mx-name-*, nada de !important, nada de estilo por instância.
+//
+// Ordem em App Settings > Theme: depois de Atlas_Core.
+// =============================================================================
+
+@import "tokens";
+@import "layout";
+@import "surfaces";
+@import "type";
+@import "buttons";
+@import "lists";
+@import "states";
+@import "motion";
+@import "a11y";

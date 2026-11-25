@@ -1,0 +1,19 @@
+// =============================================================================
+// Ponte Atlas 3 → TasteKit. Cole no fim de theme/web/main.scss do app.
+// (No Atlas 4 esta ponte não é necessária: as variáveis já são CSS.)
+//
+// Faz os tokens --tk-* lerem as variáveis Sass do tema, para que a marca seja
+// configurada num lugar só (custom-variables.scss) e nunca em tela ou widget.
+// Requer que main.scss já tenha `@import "custom-variables";` no topo.
+// =============================================================================
+
+:root {
+    --brand-primary: #{$brand-primary};
+    --brand-success: #{$brand-success};
+    --brand-warning: #{$brand-warning};
+    --brand-danger: #{$brand-danger};
+    --font-color-default: #{$font-color-default};
+    --font-family-base: #{$font-family-base};
+    --bg-color: #{$bg-color};
+    --bg-color-secondary: #{$bg-color-secondary};
+}

@@ -1,0 +1,19 @@
+// Acesso: foco sempre visível, alvos de toque de 44px. Vale para o app inteiro,
+// por isso não depende de design property.
+
+.mx-button:focus-visible,
+.mx-link:focus-visible,
+.form-control:focus-visible,
+[class*="tk-"] a:focus-visible,
+[class*="tk-"][tabindex]:focus-visible {
+    outline: 2px solid var(--tk-action);
+    outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+    .mx-button,
+    .mx-link,
+    .form-control {
+        min-height: var(--tk-tap);
+    }
+}

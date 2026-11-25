@@ -1,0 +1,29 @@
+// Estados: vazio e carregando são desenhados, nunca a grade em branco.
+// Design properties: "Taste: estado vazio" e "Taste: carregando".
+
+.tk-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--tk-s-3);
+    max-width: var(--tk-measure);
+    padding: var(--tk-s-7) 0;
+    color: var(--tk-muted);
+}
+
+.tk-skeleton {
+    min-height: var(--tk-row);
+    border-radius: var(--tk-radius);
+    background: color-mix(in srgb, var(--tk-ink) 8%, transparent);
+    animation: tk-pulse 1.6s var(--tk-ease) infinite alternate;
+}
+
+@keyframes tk-pulse {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.5;
+    }
+}

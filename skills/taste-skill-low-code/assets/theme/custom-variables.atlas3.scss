@@ -1,0 +1,59 @@
+// =============================================================================
+// Modelo de tokens para Atlas 3 (Mendix 9 e 10) · variáveis Sass
+//
+// NÃO substitua o custom-variables.scss do app por este arquivo. Copie os
+// VALORES para as variáveis de mesmo nome que já existem em
+// theme/web/custom-variables.scss. Uma variável que não existe lá não é criada.
+//
+// CONTRATO MODULAR: é aqui, e só aqui, que a marca do cliente entra no app.
+// Nenhuma cor, fonte ou raio é digitado em página, widget ou CSS de tela.
+//
+// Os valores abaixo são um padrão neutro de segurança. Troque o acento, os
+// neutros e a fonte pelos do cliente (logo, produto, material). Sem violeta.
+// =============================================================================
+
+// Marca: um acento. O azul padrão do Atlas não fica.
+$brand-primary: #1f5f4a;
+$brand-default: #e4e2dc;
+$brand-success: #2f7d4f;
+$brand-warning: #9a5b00;
+$brand-danger: #b3261e;
+
+// Texto: um quase-preto quente, nunca #000.
+$font-color-default: #1c1b19;
+$font-color-header: #1c1b19;
+$font-color-detail: #5c5a55;
+
+// Fonte: a do cliente; na falta, a do sistema. Uma família para tudo.
+$font-family-import: false;
+$font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$font-size-default: 14px; // 16px em portal, fluxo e campo
+$font-weight-header: 600;
+$font-size-h1: 28px;
+$font-size-h2: 20px;
+$font-size-h3: 16px;
+
+// Fundos: a página e a superfície.
+$bg-color: #f6f5f2;
+$bg-color-secondary: #ffffff;
+
+// Fio e raio: uma família de raio no app (soft).
+$border-color-default: #dcdad4;
+$border-radius-default: 6px;
+
+// Moldura: cor chapada, sem o gradiente padrão.
+$topbar-bg: #ffffff;
+$navigation-bg: #ffffff;
+$navigation-color: #1c1b19;
+$navsidebar-bg: #f6f5f2;
+
+// Controles: mesma altura para input e botão.
+$form-input-height: 40px;
+$form-input-border-color: #c9c6be;
+$form-input-border-focus-color: $brand-primary;
+$form-label-color: #5c5a55;
+
+// Botão padrão discreto; o preenchido é só o primário.
+$btn-default-bg: #ffffff;
+$btn-default-color: #1c1b19;
+$btn-default-border-color: #c9c6be;
