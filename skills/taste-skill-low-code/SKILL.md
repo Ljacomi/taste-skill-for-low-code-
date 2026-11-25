@@ -1,232 +1,253 @@
 ---
 name: taste-skill-low-code
 description: >-
-  Taste Skill para low-code (Mendix em primeiro lugar): o mesmo bom gosto e as mesmas regras
-  anti-slop do taste-skill original, mas a entrega é sempre MODULAR, nunca hard code. Em vez de
-  HTML/CSS/React escritos à mão, a skill produz tokens de tema (Atlas), um módulo de UI resources
-  com design properties, layouts, page templates, building blocks e snippets, blueprints de página
-  compostos só por esses módulos, e domain models especificados, validados e desenhados. Use
-  sempre que for criar, redesenhar, padronizar, polir ou revisar telas, temas, módulos de UI ou
-  domain models em Mendix (ou OutSystems, Power Apps e similares), ou quando o usuário disser que
-  um app low-code parece genérico, "cara de template Atlas" ou "feito por IA".
+  tasteskill adaptada para low-code (Mendix em primeiro lugar), a skill anti-slop de design. Mesma
+  estrutura de visualização e mesmo bom gosto da tasteskill original: copy direta com voz própria,
+  um sistema só, uma seção por tela, bordas iguais, fotografias reais e UI real do produto,
+  microinterações discretas. O que muda é a criação: nada de UX em hard code (HTML, CSS, React,
+  Tailwind); tudo é construído com itens modulares da plataforma (tema, design properties,
+  layouts, page templates, building blocks, snippets, widgets) e com o domain model. Use sempre
+  que for criar, desenhar, redesenhar, polir ou revisar telas, páginas, portais, temas ou domain
+  models em Mendix ou outra plataforma low-code, ou quando o usuário disser que um app parece
+  genérico, de template ou "feito por IA".
 ---
 
-# Taste Skill para low-code
+# tasteskill para low-code
 
-Adaptação do [taste-skill](https://github.com/Leonxlnx/taste-skill) (MIT) para plataformas
-low-code, com o Mendix como alvo principal. `<skill>` é esta pasta. Os scripts pedem Node 18+.
+Adaptação da [tasteskill](https://github.com/Leonxlnx/taste-skill) de Leonxlnx (MIT).
 
-## 0. O contrato: o gosto não muda, o meio de criação muda
+Construa a tela que uma boa empresa entregaria: ela diz com clareza o que é oferecido, mostra a
+coisa real em cada tela e parece feita para este cliente, não saída de um template e não uma
+peça de arte.
 
-**O que NÃO muda.** A estrutura de visualização e o critério de design são os do taste-skill
-original: um sistema só, interface 90 a 95% neutra com um acento, escala de espaçamento única,
-texto legível, bordas alinhadas, dois níveis de caixa, movimento discreto, copy direta, nada
-inventado, nada com cara de template.
+## O que não muda e o que muda
 
-**O que MUDA.** A criação deixa de ser código de UX escrito à mão e passa a ser feita com
-**itens modulares da plataforma low-code**. Esta skill:
+**Não muda:** a estrutura de visualização e o critério de design. Todas as regras de gosto
+abaixo são as da tasteskill original.
 
-- **NÃO entrega** páginas em HTML, CSS avulso, React, Vue, Tailwind ou qualquer front-end
-  hard-coded como produto final. Um mock em HTML só serve de rascunho descartável quando o usuário
-  pede para "ver antes"; ele nunca é a entrega e isso é dito no relatório.
-- **ENTREGA** artefatos que vivem dentro do modelo do app e são reutilizados por configuração:
+**Muda:** o meio de criação. A original escreve a página em código (HTML/CSS estático ou dentro
+de React, Next.js, Vue, Svelte, Astro, Tailwind). **Esta skill não escreve UX em hard code.**
+Toda visualização é criada com **itens modulares da plataforma low-code**, e os dados com o
+**domain model**:
 
-| No taste-skill original (hard code) | Nesta skill (modular, Mendix) |
+| Na tasteskill original (hard code) | Nesta skill (modular, Mendix) |
 |---|---|
-| `:root` com tokens em `system.css` | `theme/web/custom-variables.scss` (variáveis do Atlas) + tokens `--tk-*` do módulo |
-| Classes utilitárias escritas na página | **Design properties** (`design-properties.json`) escolhidas no painel do Studio Pro |
+| Tokens em `system.css` (`:root`) | Variáveis do tema Atlas em `theme/web/custom-variables.scss` |
+| Classes escritas no markup | **Design properties** marcadas no Studio Pro |
 | `starter.html`, nav, footer | **Layouts** e **navigation** do app |
-| Receitas de seção (`sections-library.md`) | **Page templates** e **building blocks** |
-| Fragmentos de UI colados e reescritos | **Snippets** parametrizados e widgets nativos/Marketplace |
-| CSS de página | Partial SCSS no módulo de UI resources (`themesource/<módulo>/web`) |
-| Estrutura de dados implícita no markup | **Domain model** (entidades, atributos, associações, enumerations) |
-| `consistency.mjs`, `gate.mjs` no navegador | `check-theme.mjs`, `domain-model.mjs` e o gate manual (`references/gate.md`) |
+| Receitas de seção | **Page templates** e **building blocks** |
+| Fragmentos de UI colados na página | **Snippets** e widgets nativos ou do Marketplace |
+| CSS de página | Partial SCSS num **módulo de UI resources** (`themesource/<módulo>/web`), exposto por design property |
+| Dados fixos no markup | **Domain model**: entidades, atributos, associações, enumerations |
+| A página entregue como arquivo | A página montada no Studio Pro a partir de um **blueprint** (árvore de widgets que cita o módulo de cada nó) |
 
-Regra de bolso: **se algo foi estilizado ou montado duas vezes, vira módulo; se foi estilizado
-direto num widget, está errado.** Tudo o que esta skill escreve em disco (SCSS, JSON) é
-infraestrutura de módulo reutilizável, nunca a tela em si. A tela é sempre composição.
+Proibido, por ser hard code: a propriedade *Style* (CSS inline) de um widget; seletor
+`.mx-name-*`; widget HTML/JavaScript Snippet para desenhar tela; `!important`; cor, tamanho ou
+espaço literal fora das variáveis do tema; entregar HTML, CSS ou React como produto final.
 
-Equivalentes em outras plataformas (OutSystems, Power Apps, Appian): `references/platforms.md`.
-Onde este texto diz "Mendix", aplique o equivalente e mantenha as mesmas regras.
+Em outra plataforma (OutSystems, Power Apps, Appian), use o equivalente de cada item e mantenha
+as mesmas regras.
 
-## 1. Regras da casa
+## Regras da casa
 
-Estas dez vencem tudo o mais nesta skill.
+Estas nove vencem tudo o mais nesta skill.
 
-1. **Nada de hard code.** Proibido: a propriedade *Style* (CSS inline) de um widget; seletor
-   `.mx-name-*` (estiliza uma instância, não um padrão); widget HTML/JavaScript Snippet para
-   montar interface; `!important`; cor, tamanho ou espaçamento literal fora do arquivo de tokens.
-2. **Um sistema só.** Um par de botões, um estilo de card, uma família de raio, um fio (hairline),
-   uma escala de títulos, um jeito de link. Todos saem dos tokens e das design properties.
-3. **Compor, não desenhar.** Uma página é um layout + um page template + building blocks +
-   snippets. Um padrão que aparece em duas páginas vira building block ou snippet antes da terceira.
-4. **Classe só por design property.** O campo *Class* de um widget recebe apenas classes `tk-*` ou
-   do Atlas que ainda não têm design property, e cada uso é listado no relatório como dívida.
-5. **Uma tarefa por página, uma ação principal por tela.** O botão primário (o único preenchido
-   com o acento) aparece uma vez por tela; o resto é secundário ou discreto.
-6. **Bordas iguais.** Todo bloco na mesma largura de conteúdo e nas colunas do layout grid; nada
-   deslocado para um lado, nenhuma rolagem lateral em 1440, 1024, 768 e 390.
-7. **Todo estado é desenhado.** Vazio, carregando, erro, sem permissão e lista longa têm bloco
-   próprio (building block), nunca uma grade vazia ou a mensagem padrão da plataforma.
-8. **Domain model antes da tela.** Nenhuma página é planejada antes de o modelo estar
-   especificado, validado e desenhado (`references/domain-model.md`).
-9. **Nada inventado.** Sem dados fictícios vendidos como reais, sem métricas, clientes ou
-   depoimentos inventados. Dado de exemplo é marcado como exemplo e sai antes da entrega.
-10. **Sem violeta.** Nada de roxo ou lavanda como acento, fundo ou gradiente (logos reais de
-    terceiros mantêm suas cores). E sem o azul padrão do Atlas deixado como está: o acento vem do
-    cliente.
+1. **Nenhuma legenda ou descrição sob imagem, render ou visual.** Créditos de licença numa única
+   linha de rodapé.
+2. **Todo visual renderiza, nunca um fundo vazio,** em 1440, 1024, 768 e 390.
+3. **Uma seção por tela:** o hero sozinho na primeira tela, cada seção com exatamente uma ou duas
+   telas de altura em 1440x900, sem o título da próxima seção aparecendo. Em telas de aplicação
+   (lista, detalhe, formulário, painel): uma tarefa por página e uma ação principal por tela.
+4. **Bordas esquerda e direita do conteúdo iguais.**
+5. **Microanimações de hover:** um card com link sobe 2px, uma foto dá zoom de 1.02 a 1.03 dentro
+   da moldura, botões reagem no hover e afundam no clique, sublinhados se desenham. Sem
+   inclinação, carrosséis ou abas com tempo. Todo hero entra uma vez no carregamento. Tudo isso
+   vem de uma classe do módulo de UI resources ligada a uma design property, nunca de CSS num
+   widget.
+6. **Mais e melhores fotografias reais onde cabem;** fundos, heros, layouts e fontes melhores.
+7. **Ícones reais em cores reais** (o ícone verdadeiro de um produto conhecido, nunca um
+   desenhado), guardados numa image ou icon collection do módulo; pequenos diagramas em cards.
+8. **As grandes cenas e os momentos criativos fazem parte da skill,** mas efeitos de shader e
+   cenas só onde o negócio tem assunto técnico (tech, IA, ferramentas de desenvolvimento, games,
+   fintech, hardware), nunca num café, padaria, pousada ou loja: esses recebem fotografias. Em
+   low-code, um efeito só entra por um pluggable widget (Marketplace ou próprio), nunca por
+   script colado na página.
+9. **Endereços:** só rua e bairro (sem rua: o bairro), sem número, CEP ou coordenadas; sem CNPJ
+   ou inscrição; sem telefone em formato real; contatos em `.example`.
 
-## 2. O tipo de app decide tudo
+## 1. O tipo de negócio decide tudo
 
-Escreva o tipo na primeira linha do plano. Ele define densidade, layout e o que lidera a tela.
+Escreva o tipo na primeira linha do plano.
 
-| Brief | Tipo | Layout base | O que lidera | Densidade |
-|---|---|---|---|---|
-| Back-office, ERP, cadastro, operação interna | `interno` | sidebar + topbar | data grid, formulário | compacta (linha 40px) |
-| Portal de cliente, parceiro ou fornecedor | `portal` | topbar | status do pedido/processo, uma ação | confortável (linha 48px) |
-| Painel gerencial, KPIs, monitoramento | `painel` | topbar ou sidebar fina | 3 a 5 números e 1 ou 2 gráficos | confortável |
-| Fluxo guiado: solicitação, onboarding, aprovação | `fluxo` | topbar mínima, sem menu | um passo por tela, progresso | ampla (linha 56px) |
-| Campo, chão de fábrica, tablet/telefone | `campo` | native ou PWA, barra de ação embaixo | a tarefa do turno, alvos de 48px | ampla |
+| Brief | Tipo |
+|---|---|
+| App, SaaS, IA, ferramenta de desenvolvimento, fintech ou banco, estúdio que vende o próprio software | software |
+| Um jogo, um estúdio lançando seu jogo | gaming |
+| Hardware ou dispositivo (drone, braço robótico, teclado) | tech |
+| Qualquer outro produto físico ou marca (cadeira, bicicleta, café vendido online) | product |
+| Pessoas são contratadas: clínica, escritório de advocacia, agência, estúdio criativo, ofício | service |
+| Pessoas vão até lá: café, bar, padaria, restaurante, pousada, hotel pequeno, loja, academia | place |
 
-Um app pode ter mais de um tipo por perfil de usuário (user role): planeje por role, cada um com
-seu ponto de entrada na navigation.
+"Tech" abaixo significa software, gaming ou tech; "outros" é todo o resto. Efeitos, cenas,
+loops, contadores, fundos em CSS, páginas escuras e heros escuros são só de tech. Uma página de
+"outros" é fotografia, cor chapada, tipo, ícones reais, a entrada do hero e a camada de hover.
 
-## 3. O que serve a quê
+Num app de operação interna (back-office, cadastro, aprovação), o tipo continua sendo o do
+negócio do cliente e define paleta, tom e imagens; a densidade vem da tarefa: grade e formulário
+compactos para quem usa o dia todo, telas amplas para portal e fluxo guiado.
 
-Abra a referência de cada família antes de usar. Leia `system.md`, `modules.md` e
-`domain-model.md` inteiros antes da primeira entrega.
+## 2. O plano da página por tipo
 
-| Necessidade | Artefato modular | Onde está | Referência |
-|---|---|---|---|
-| Cores, tipo, espaço, raio, sombra | variáveis do tema + tokens `--tk-*` | `assets/theme/`, `assets/themesource/tastekit/web/_tokens.scss` | `system.md` |
-| Vocabulário visual clicável | design properties | `assets/themesource/tastekit/web/design-properties.json` | `modules.md` |
-| Estrutura do app, menu, cabeçalho | layouts + navigation | plano em `assets/templates/module-plan.md` | `modules.md` |
-| Esqueleto de página por tarefa | page templates | catálogo em `pages.md` | `pages.md` |
-| Blocos repetidos (cabeçalho, card, vazio, KPI) | building blocks e snippets | catálogo em `modules.md` | `modules.md` |
-| Telas | blueprint de página | `assets/templates/page-blueprint.md` | `pages.md` |
-| Dados | domain model | `assets/templates/domain-model.json`, `scripts/domain-model.mjs` | `domain-model.md` |
-| Textos, rótulos, mensagens | copy | n/a | `copy.md` |
-| Conferência final | checagens + gate | `scripts/check-theme.mjs` | `gate.md` |
+- **Place.** Fotografias lideram. O hero é uma fotografia sempre que houver um quadro que caiba;
+  o bloco de visita na segunda tela; a oferta, o lugar, pedidos ou reserva. Variedade sem
+  efeitos: a oferta e o lugar usam composições diferentes; um momento de tipo (o endereço ou o
+  nome em grande); uma ação principal por tela; texto de lista em 16px. Fundos chapados, fotos
+  quadradas, um estilo de botão.
+- **Product e service.** Fotografias lideram: o produto, as pessoas, os ambientes, o trabalho.
+  Ícones reais das ferramentas que o estúdio usa; no máximo um diagrama estático; fundos chapados
+  e uma faixa de marca. Sem efeito de shader, grão, gradiente, cena ou loop. Um produto físico
+  sem fotos é mostrado em fotografias substitutas do mesmo tipo de coisa, cada uma listada no
+  relatório; nunca um desenho ou banco de imagens de clima.
+- **Toda página de produto:** o produto **grande** onde aparece inteiro, nunca em tamanho médio
+  num painel cinza arredondado sobre fundo cinza; **uma imagem diferente em cada seção**; **toda
+  promessa de título mostrada em imagem**; nenhuma estrutura repetida; **nenhum fato duas vezes**.
+- **Tech.** O assunto do próprio cliente lidera em tamanho real. Software: a própria UI, viva,
+  mostrando aquilo em que trabalha, num único quadro; nunca um dashboard genérico. Em Mendix isso
+  é a tela real do app ou um snippet com dados reais do domain model, não uma imagem de mock.
+  **60 a 80 palavras por tela** fora da UI. No máximo um efeito e um ou dois momentos.
+- **Um objeto nunca carrega a página.** O produto ou objeto do hero aparece inteiro no hero e em
+  no máximo mais duas seções; outro tipo de visual carrega o resto.
+- **Os materiais do cliente ganham lugar.** Trailer, key art, screenshots ou vídeo que o brief
+  cita recebem cada um um quadro que já parece pronto, nunca vazio.
+
+## 3. O que serve a qual página
+
+Cada necessidade da original, agora atendida por um item modular. Um traço significa nunca.
+
+| Necessidade | Item modular (Mendix) | Software, gaming | Hardware | Product, service | Place |
+|---|---|---|---|---|---|
+| Alturas, bordas, heros, tipo | **Layout** + **page template** de hero | sim | sim | sim | hero de lugar |
+| Seções e receitas | **Building blocks**, um por receita de seção | seu plano | plano de produto | seu plano | plano de lugar |
+| Tokens, grid, botões, nav, rodapé, cor | `custom-variables.scss`, **layout grid**, **navigation**, snippet de rodapé | sim | sim | sim | tokens de lugar |
+| Formulários, teclado | **Data view** + inputs nativos, validação pelo domain model | sim | sim | sim | sim |
+| Copy, contatos, créditos | Textos traduzíveis (*Languages*), nunca fixos em expressão | sim | sim | sim | sim |
+| Entrada do hero, hover, clique, foco | Classes do módulo de UI resources via **design property** | sim | sim | sim | sim |
+| Loops de card, contador | Pluggable widget | sim | sim | - | - |
+| Fotografias | **Image collection** ou entidade que herda de `System.Image` | pessoas, clientes | lideram | lideram | lideram, 12 a 20 |
+| Ícones reais de ferramentas e apps | **Icon/image collection** do módulo | sim | sim | os realmente usados | - |
+| Cards de recurso, fragmentos de UI | **Snippets** com dados reais | lideram | seu app | um app que o cliente usa | - |
+| Cards de diagrama | Snippet ou pluggable widget | 0 a 2 | 0 a 2 | 0 a 1, estático | - |
+| Fundos | Variáveis do tema e uma design property de fundo | 0 a 2 | 0 a 2 | chapado | chapado |
+| Efeitos, objetos, cenas | Pluggable widget (Marketplace ou próprio) | um efeito | um efeito | - | - |
+| Dados de qualquer tela | **Domain model** | sim | sim | sim | sim |
 
 ## 4. A execução
 
-0. **Inventário da plataforma.** Antes de qualquer coisa, anote: plataforma e versão (Mendix 9,
-   10 ou 11), versão do Atlas (Atlas 3 usa variáveis Sass `$brand-primary`; Atlas 4 usa variáveis
-   CSS `--brand-primary`), módulos de UI resources já existentes, widgets do Marketplace
-   instalados (Data Widgets, Charts, etc.) e se o destino é web responsivo, PWA ou native. Se a
-   pasta do app está disponível, leia `theme/web/custom-variables.scss` e
-   `themesource/*/web/design-properties.json`; se não está, pergunte uma vez e siga com Atlas 3 +
-   web responsivo como suposição declarada no relatório.
+0. **A stack.** A plataforma é o Mendix (ou a que o usuário indicar). Anote a versão do Studio
+   Pro e do Atlas (Atlas 3 usa variáveis Sass, `$brand-primary`; Atlas 4 usa variáveis CSS,
+   `--brand-primary`), se o destino é web responsivo, PWA ou native, e os módulos e widgets do
+   Marketplace já instalados. Um app existente é construído no próprio tema e nos próprios
+   módulos dele. Nunca saia da plataforma para escrever a tela em código.
 
-1. **Leia o brief.** Anote o tipo (seção 2), quem usa (user roles), a tarefa principal de cada
-   role, a ação principal de cada página e o material real: logo, cores da marca, dados de
-   exemplo verdadeiros, regras de negócio.
+1. **Leia o brief.** Anote o tipo (seção 1), o que é oferecido, quem usa (user roles), a ação
+   principal (a transação: Reservar um quarto, Criar pedido, Enviar para aprovação) e o material
+   real: logo, telas, fotografias, preços, endereço, horários, regras de negócio.
 
-2. **Domain model primeiro.** Escreva o modelo em JSON (`assets/templates/domain-model.json` é o
-   formato), valide e gere o diagrama:
+2. **Domain model antes da tela.** Liste as entidades, atributos, associações e enumerations que
+   as páginas mostram e alteram, e mostre o diagrama ao usuário (Mermaid `erDiagram` serve de
+   rascunho) antes de criar qualquer coisa:
+   - entidade no singular, UpperCamelCase, com uma frase de documentação (`Order`, `OrderLine`);
+   - atributo sem repetir o nome da entidade (`Order.Number`); Boolean com `Is`/`Has`/`Can`;
+     dinheiro em Decimal; conjunto fechado como enumeration (`ENUM_OrderStatus`);
+   - associação com o nome padrão `<Dono>_<Alvo>` e delete behavior decidido;
+   - não persistível só para o que não sobrevive à sessão (filtros, passos de wizard);
+   - access rules por role em toda entidade persistível;
+   - o diagrama com o mesmo gosto da tela: mestres no topo ou à esquerda, detalhes abaixo,
+     alinhado em grade, nenhuma linha cruzada, até cerca de 15 entidades por módulo.
 
-   ```bash
-   node <skill>/scripts/domain-model.mjs lint modelo.json
-   node <skill>/scripts/domain-model.mjs mermaid modelo.json > modelo.mmd
-   ```
+3. **Escreva toda a copy primeiro:** o título nomeia a categoria e quem compra, ou o lugar (numa
+   tela de app: a coisa ou a tarefa); um fato concreto na primeira tela; um substantivo em cada
+   título; botões como verbo + objeto. Nada é inventado.
 
-   Corrija todo FAIL. O modelo segue `references/domain-model.md`: nomes, tipos, associações,
-   segurança e a disposição visual do diagrama no Studio Pro.
+4. **Planeje a página como telas.** Linha 1: o tipo. Linha 2: paleta, fontes, raio, com uma frase
+   sobre por que servem ao negócio. Depois uma linha por seção: a ideia única, a imagem, as telas
+   (1 ou 2) e **o item modular que a constrói** (qual layout, page template, building block,
+   snippet). Um padrão que aparece duas vezes vira building block ou snippet antes da terceira.
 
-3. **Escreva toda a copy antes das telas** (`references/copy.md`): títulos de página, rótulos de
-   campo, botões (verbo + objeto), mensagens de validação, estados vazios, confirmações.
+5. **Defina os tokens no tema, nunca na página.** A paleta sai do cliente (logo, produto,
+   fachada), nunca violeta, e entra só em `theme/web/custom-variables.scss`, alterando variáveis
+   que já existem lá (marca, fonte, fundos, raio, botões, inputs). Raio: `sharp` para fintech e
+   ferramentas de desenvolvimento, `soft` por padrão, `round` para apps de consumo, quadrado em
+   place. O que o Atlas não cobre vira uma classe num módulo de UI resources
+   (`themesource/<módulo>/web`), exposta em `design-properties.json`.
 
-4. **Defina os tokens, nunca "a gosto".** A paleta sai do cliente (logo, produto, material).
-   Preencha `assets/theme/custom-variables.atlas3.scss` ou `.atlas4.scss` e copie os valores para
-   o `custom-variables.scss` do app, alterando só variáveis que já existem lá. Raio: `sharp`
-   (0/2px) para financeiro e industrial, `soft` (6/8px) por padrão, `round` (12px) para consumo.
+6. **Construa com módulos.** Entregue o **blueprint** de cada página: a árvore de widgets, cada
+   nó citando sua origem (layout, page template, building block, snippet, widget nativo ou do
+   Marketplace), as design properties marcadas, a fonte de dados (entidade, XPath, microflow) e a
+   ação de cada botão. Nenhum nó tem estilo próprio. Convenções de nome: páginas
+   `<Entidade>_Overview`, `_NewEdit`, `_View`; snippets `SNIP_…`; building blocks `BB_…`;
+   microflows `ACT_…`, `DS_…`, `VAL_…`. O desenvolvedor (ou uma automação como Maia ou o Model
+   SDK) monta exatamente o blueprint no Studio Pro.
 
-5. **Planeje os módulos** (`assets/templates/module-plan.md`): quais layouts, page templates,
-   building blocks e snippets o app precisa, com nome, propósito, parâmetros e onde são usados.
-   Instale o módulo `tastekit` (`assets/themesource/tastekit`) em `themesource/` do app, crie no
-   Studio Pro um módulo de mesmo nome marcado como *UI resources module* e ordene-o depois do
-   Atlas em *App Settings > Theme*. Padrão novo entra como partial + design property, nunca como
-   CSS solto.
+7. **Confira e olhe.** Com o app rodando, ou em prints, em 1440, 1024, 768 e 390, leia cada tela
+   contra a checklist. No Studio Pro: nenhum widget com *Style* preenchido, nenhum uso do campo
+   *Class* que não seja uma classe do módulo ainda sem design property, nenhum HTML Snippet
+   desenhando tela. Corrija e confira de novo, três rodadas no máximo.
 
-6. **Componha as páginas como blueprints** (`assets/templates/page-blueprint.md`): uma árvore de
-   widgets em que cada nó cita o módulo de onde vem (layout, template, building block, snippet) e
-   as design properties marcadas. Nenhum nó tem estilo próprio. Blueprint é o que o desenvolvedor
-   monta no Studio Pro; se houver automação disponível (Mendix Model SDK, Maia), ela executa o
-   mesmo blueprint, sem liberdade de estilo.
-
-7. **Confira.**
-
-   ```bash
-   node <skill>/scripts/check-theme.mjs <pasta-do-app-ou-do-módulo>
-   node <skill>/scripts/domain-model.mjs lint modelo.json
-   ```
-
-   Depois o gate manual de `references/gate.md`, lido contra a checklist abaixo, nas larguras
-   1440, 1024, 768 e 390 no app em execução (ou nos prints que o usuário enviar). Três rodadas no
-   máximo; o que sobrar aberto vai para o relatório.
-
-8. **Relatório:** a linha do gate primeiro (`GATE: PASS`, `OPEN` ou `NÃO VERIFICADO`); o tipo; a
-   versão da plataforma e as suposições; os tokens e por que a paleta serve ao cliente; a lista de
-   módulos criados e reutilizados; o diagrama do domain model; todo uso do campo *Class* (regra
-   4); todo FAIL em aberto; o que não pôde ser conferido (em geral, o app rodando); e o que o
-   cliente precisa fornecer (logo, dados reais, textos legais).
+8. **Relatório:** o tipo; a paleta e por que serve; os módulos criados e reutilizados; o diagrama
+   do domain model; todo desvio do contrato modular e por quê; o que não pôde ser conferido (em
+   geral, o app rodando); todo fato assumido; as fotografias e os materiais que o cliente precisa
+   fornecer, substitutos incluídos.
 
 ## 5. Checklist
 
-Entre colchetes, o id da checagem de script quando existe; o resto é conferido no gate manual.
-
-- **Modular:** nenhum widget com *Style* preenchido; nenhum `.mx-name-*`, `!important` ou cor
-  literal fora dos tokens [instance-selector, important, raw-colour]; todo padrão repetido é
-  building block ou snippet; toda classe usada existe numa design property [dp-class-missing].
-- **Um sistema:** um par de botões, um card, uma família de raio, uma escala de títulos; espaços
-  só na escala 4, 8, 12, 16, 24, 32, 48, 64, 96 [off-scale]; duas caixas de profundidade no máximo.
-- **Primeira tela:** o título diz o que a página é (substantivo), a ação principal está visível
-  sem rolar, um fato concreto do dado (contagem, status, data) aparece junto do título.
-- **Bordas iguais:** todo conteúdo na mesma largura (`tk-wrap`), colunas do layout grid somando
-  12, nada mais largo que a tela em 390.
-- **Texto:** corpo 14px no mínimo em app denso e 16px em portal, fluxo e campo; nada abaixo de
-  13px [small-type]; contraste 4.5:1 no mínimo, 7:1 para texto de leitura; sentence case; linha de
-  texto corrido com no máximo 62 caracteres (`tk-measure`).
-- **Cor:** interface neutra, um acento, sem violeta [violet]; o acento preenchido só no botão
-  primário; status (sucesso, aviso, perigo) só para status, nunca decoração; `#000` puro nunca
-  [pure-black].
-- **Estados:** vazio, carregando, erro e sem permissão desenhados em toda lista, grade e
-  formulário; validação sob o próprio campo; confirmação só depois de um commit real.
-- **Dados:** grade com no máximo 7 colunas visíveis, números alinhados à direita, datas num
-  formato só, coluna de ação por último; paginação ou carregamento sob demanda acima de 20 linhas.
-- **Formulários:** uma coluna (duas só em 1024+ para campos curtos e pareados), rótulo acima do
-  campo, grupos de até 7 campos, obrigatório marcado, botão primário à esquerda do cancelar e com
-  o mesmo texto do título da tarefa.
-- **Movimento:** hover discreto em linha, card e botão (`tk-lift`: 2px); 120 a 200 ms; nada
-  pisca, desliza por rolagem ou gira; `prefers-reduced-motion` respeitado [transition-all].
-- **Acesso:** foco visível em todo controle, alvos de 44px (48 em `campo`), rótulo em todo campo,
-  texto alternativo em toda imagem com significado, ordem de tabulação igual à ordem visual.
-- **Domain model:** todo FAIL de `domain-model.mjs lint` resolvido; diagrama sem linhas cruzadas;
-  access rules por role em toda entidade persistível; nenhuma entidade órfã sem motivo.
-- **Copy:** títulos nomeiam coisas, botões são verbo + objeto, um nome por conceito no app
-  inteiro, mensagens de erro dizem o que fazer; nenhum "Lorem ipsum", "Novo item" ou texto padrão
-  do template.
-- **Seus olhos:** ao lado do Atlas padrão, parece um produto desenhado para este cliente; nada
-  torto, desalinhado, cortado ou sobreposto.
+- **Modular:** nenhum hard code (lista no topo); toda cor, fonte e espaço vem do tema; todo
+  padrão repetido é building block ou snippet; todo estilo é uma design property.
+- **Primeira tela:** diz o que é oferecido, para quem ou onde, com um fato concreto; o hero a
+  preenche sozinho em toda largura, com o botão principal dentro.
+- **Uma seção por tela:** cada seção com 1 ou 2 telas, título primeiro e alinhado no topo, nada
+  do vizinho aparecendo, nada esparso, nenhuma seção meio vazia.
+- **Bordas iguais:** todo bloco nas mesmas margens ou nas colunas do layout grid, nada deslocado
+  para um lado, nenhuma rolagem lateral.
+- **Todo visual desenha** em 1440, 1024, 768 e 390.
+- **Nenhuma legenda** explica, se desculpa ou rotula uma imagem; créditos numa linha de rodapé;
+  nenhum placeholder, texto de template ou dado de exemplo deixado na tela.
+- **As coisas certas para o tipo:** fora de tech, nenhum efeito, grão ou cena; o assunto aparece:
+  o produto grande, inteiro em no máximo três seções, uma imagem nova em cada; fotografias reais
+  onde cabem, nenhuma duas vezes; ícones reais em suas cores; fundos chapados em "outros".
+- **Movimento:** todo botão, link, card e foto com link responde visivelmente ao ponteiro, nada
+  inclina; o hero entra uma vez; nada se move porque a página rolou; sob *reduced motion* tudo
+  repousa e nada fica escondido.
+- **Contatos** como a regra 9.
+- **Teclado:** todo controle com nome, alt nas imagens, rótulos visíveis, títulos um nível por
+  vez, foco sempre visível.
+- **Um sistema:** um par de botões, um estilo de card, uma escala de raio, um jeito de link; no
+  máximo duas caixas de profundidade; uma escala de títulos; contraste de texto.
+- **Copy e links:** títulos nomeiam coisas, botões são verbo + objeto, no máximo duas ações no
+  hero; um fato, uma redação; todo link chega, formulários enviam, confirmação só depois de um
+  commit real, cada erro sob o próprio campo; nenhuma palavra de slop, frase de banco ou sobra.
+- **Domain model:** nomes no padrão, documentação em toda entidade, access rules por role,
+  diagrama sem linhas cruzadas.
+- **820, 768, 390 e 320:** seções em suas telas; nada sobre outra coisa nem sob uma barra fixa;
+  todo link e controle fora de texto corrido com 44px de altura; nada além da tela em 320; uma
+  coluna em 390, botões na largura total.
+- **Seus olhos:** parece um produto profissional feito para este cliente, não o Atlas padrão;
+  nada inclinado, desalinhado, cortado ou sobreposto; o hero é o trabalho, não um clima.
 
 ## 6. Nunca
 
-- HTML, CSS, React ou Tailwind como entrega; CSS inline em widget; estilo por instância.
-- Um padrão copiado e colado em três páginas em vez de building block ou snippet.
-- O tema Atlas intacto (azul padrão, gradiente no topbar, cards com sombra em tudo) apresentado
-  como design.
-- Página antes do domain model; entidade sem documentação, sem access rule ou com nome no plural.
-- Card dentro de card dentro de card; ícone decorativo em cada rótulo; emoji como ícone.
-- Dashboard genérico com seis gráficos sem pergunta; KPI sem unidade e sem período.
-- Dados, clientes, números ou depoimentos inventados; logo de terceiro redesenhado.
-- Violeta ou lavanda; gradiente decorativo; sombra pesada; `#000` puro.
+- UX em hard code: HTML, CSS, React ou Tailwind como entrega; CSS inline em widget; estilo por
+  instância; HTML/JavaScript Snippet para montar tela.
+- O mesmo arranjo copiado em três páginas em vez de building block ou snippet.
+- O tema Atlas intacto (azul padrão, gradiente no topbar) apresentado como design.
+- Página antes do domain model.
+- Um card, linha ou bloco que aparece com fade na rolagem; parallax em texto; scroll-jacking;
+  piscar aleatório.
+- Fotos de banco passadas como produto, pessoas ou lugar do cliente; página de produto que nunca
+  mostra o produto.
+- Imitação desenhada de um logo real; avaliações, citações, clientes ou números inventados.
+- Violeta ou lavanda no design da página: acento, fundo, gradiente, cor de efeito ou matiz (um
+  logo real de terceiro mantém suas cores).
+- Copiar código, texto, imagens ou o efeito-assinatura de um site de referência.
 - Editar arquivos do Atlas (`themesource/atlas_core`) ou de módulos do Marketplace: sobrescreva
-  no seu módulo, que carrega depois.
-- Copiar código, texto, imagens ou o efeito-assinatura de um site ou app de referência.
-
-## Referências
-
-Todas em `references/`: `system.md` (tokens e sistema visual), `modules.md` (arquitetura modular,
-design properties, building blocks, snippets, nomes), `pages.md` (page templates e blueprints),
-`domain-model.md` (modelagem e visualização), `copy.md` (texto de interface), `gate.md` (o gate
-final), `platforms.md` (equivalências fora do Mendix).
+  no seu módulo de UI resources, que carrega depois.
